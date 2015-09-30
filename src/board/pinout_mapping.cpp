@@ -12,18 +12,23 @@ namespace board
 
 /// --- UART2 - TIC	--------------------------------------------------------------------------------
 
-const USART_TypeDef* TIC_UART = USART2;
-const GPIO_TypeDef* TIC_UART_GPIO_PORT = GPIOA;
+//const USART_TypeDef* TIC_UART = USART2;
+//const GPIO_TypeDef* TIC_UART_GPIO_PORT = GPIOA;
 
-/// --- UART3 - Trace	--------------------------------------------------------------------------------
+/// --- I2C1 - LCD	--------------------------------------------------------------------------------
+
+const I2C_TypeDef* LCD_I2C = I2C1;
+const GPIO_TypeDef* LCD_I2C_GPIO_PORT = GPIOB;
+
+/// --- UART3 - Trace	----------------------------------------------------------------------------
 
 const USART_TypeDef* Trace_UART = USART3;
 const GPIO_TypeDef* Trace_UART_GPIO_PORT = GPIOD;
 
 /// --- SPI2 - SD Card	----------------------------------------------------------------------------
 
-const SPI_TypeDef* SDCARD_SPI = SPI2;
-const GPIO_TypeDef* SDCARD_SPI_GPIO_PORT = GPIOB;
+//const SPI_TypeDef* SDCARD_SPI = SPI2;
+//const GPIO_TypeDef* SDCARD_SPI_GPIO_PORT = GPIOB;
 }
 
 /// === END OF FILE	================================================================================

@@ -64,6 +64,14 @@ void HAL_USART_RxCpltCallback(USART_HandleTypeDef* _husart);
 void HAL_USART_TxCpltCallback(USART_HandleTypeDef* _husart);
 void HAL_USART_ErrorCallback(USART_HandleTypeDef* _husart);
 
+/// --- I2C	----------------------------------------------------------------------------------------
+
+void I2C1_EV_IRQHandler(void);
+void I2C1_ER_IRQHandler(void);
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef* _hi2c);
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef* _hi2c);
+
+
 #ifdef __cplusplus
 }
 #endif

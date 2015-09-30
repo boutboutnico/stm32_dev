@@ -46,9 +46,39 @@ extern "C"
 //	__HAL_RCC_GPIOA_CLK_ENABLE();
 //}
 
+/// --- I2C1 - LCD	--------------------------------------------------------------------------------
+
+const mcu::Peripherals_e LCD_I2C_e = mcu::Peripherals_e::I2C_1;
+extern const I2C_TypeDef* LCD_I2C;
+extern const GPIO_TypeDef* LCD_I2C_GPIO_PORT;
+const uint16_t LCD_I2C_SCL_PIN = GPIO_PIN_6;
+const uint8_t LCD_I2C_SCL_PIN_AF = GPIO_AF4_I2C1;
+const uint16_t LCD_I2C_SDA_PIN = GPIO_PIN_9;
+const uint8_t LCD_I2C_SDA_PIN_AF = GPIO_AF4_I2C1;
+
+const IRQn_Type LCD_I2C_EV_IRQn = I2C1_EV_IRQn;
+const uint8_t LCD_I2C_EV_IRQn_PRIO = 6;
+const uint8_t LCD_I2C_EV_IRQn_SUBPRIO = 1;
+
+const IRQn_Type LCD_I2C_ER_IRQn = I2C1_ER_IRQn;
+const uint8_t LCD_I2C_ER_IRQn_PRIO = 6;
+const uint8_t LCD_I2C_ER_IRQn_SUBPRIO = 2;
+
+const uint8_t LCD_I2C_Address = 0;
+
+inline void LCD_I2C_CLK_ENABLE()
+{
+	__HAL_RCC_I2C1_CLK_ENABLE();
+}
+
+inline void LCD_I2C_GPIO_CLK_ENABLE()
+{
+	__HAL_RCC_GPIOB_CLK_ENABLE();
+}
+
 /// --- UART3 - Trace	----------------------------------------------------------------------------
 
-const mcu::Peripherals_e Trace_UART_e = mcu::Peripherals_e::UART3;
+const mcu::Peripherals_e Trace_UART_e = mcu::Peripherals_e::UART_3;
 extern const USART_TypeDef* Trace_UART;
 extern const GPIO_TypeDef* Trace_UART_GPIO_PORT;
 const uint16_t Trace_UART_TX_PIN = GPIO_PIN_8;

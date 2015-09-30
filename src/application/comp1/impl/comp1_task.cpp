@@ -42,7 +42,8 @@ Comp1_Task::Comp1_Task()
 
 bool Comp1_Task::initialize(ComponentRegistry& _comp_reg)
 {
-	return true;
+	(void) _comp_reg;
+	return lcd_i2c_driver_.initialize();
 }
 
 /// ------------------------------------------------------------------------------------------------
@@ -53,31 +54,32 @@ void Comp1_Task::run()
 
 	const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
 
-	uint32_t i = 0;
+//	uint32_t i = 0;
+//
+//	trace_putc('1');
+//	trace_puts("ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`");
+//	trace_puts("abcdefghijklmnopqrstuvwxyz{|}~");
+//	trace_printf("val=%d\n", i++);
+//	trace_printf("%d\n", 1234);				//"1234"
+//	trace_printf("%6d,%3d%%\n", -200, 5);    //"  -200,  5%"
+//	trace_printf("%-6u\n", 100);			//"100   "
+//	trace_printf("%ld\n", 12345678L);		//"12345678"
+//	trace_printf("%04x\n", 0xA3);			//"00a3"
+//	trace_printf("%08LX\n", 0x123ABC);		//"00123ABC"
+//	trace_printf("%016b\n", 0x550F);		//"0101010100001111"
+//	trace_printf("%s\n", "String");			//"String"
+//	trace_printf("%-4s\n", "abc");			//"abc "
+//	trace_printf("%4s\n", "abc");			//" abc"
+//	trace_printf("%c\n", 'a');				//"a"
+//	trace_printf("%f\n", 10.0);            	//<xprintf lacks floating point support>
+//	vTaskDelay(xDelay);
 
-	trace_putc('1');
-	trace_puts("ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`");
-	trace_puts("abcdefghijklmnopqrstuvwxyz{|}~");
-	trace_printf("val=%d\n", i++);
-	trace_printf("%d\n", 1234);				//"1234"
-	trace_printf("%6d,%3d%%\n", -200, 5);    //"  -200,  5%"
-	trace_printf("%-6u\n", 100);			//"100   "
-	trace_printf("%ld\n", 12345678L);		//"12345678"
-	trace_printf("%04x\n", 0xA3);			//"00a3"
-	trace_printf("%08LX\n", 0x123ABC);		//"00123ABC"
-	trace_printf("%016b\n", 0x550F);		//"0101010100001111"
-	trace_printf("%s\n", "String");			//"String"
-	trace_printf("%-4s\n", "abc");			//"abc "
-	trace_printf("%4s\n", "abc");			//" abc"
-	trace_printf("%c\n", 'a');				//"a"
-	trace_printf("%f\n", 10.0);            	//<xprintf lacks floating point support>
-	vTaskDelay(xDelay);
-
-	/// --- Infinite Loop	------------------------------------------------------------------------
+/// --- Infinite Loop	------------------------------------------------------------------------
 
 	for (;;)
 	{
 		LED_Green.toggle();
+		lcd_i2c_driver_.write("coucou je suis le lapin", 10);
 		vTaskDelay(xDelay);
 	}
 }

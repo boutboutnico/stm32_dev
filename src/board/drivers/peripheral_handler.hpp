@@ -43,8 +43,8 @@ namespace mcu
 enum class Peripherals_e
 	: uint8_t
 	{
-		UART2 = 0x00,
-	UART3,
+		UART_3 = 0x00,
+	I2C_1,
 };
 
 /// === Union	====================================================================================
@@ -61,13 +61,20 @@ union Handle_u
 	{
 	}
 
+	Handle_u(I2C_HandleTypeDef* _handle)
+			: i2c_(_handle)
+	{
+	}
+
 	/// --- Public Attributes
 	UART_HandleTypeDef* uart_;
 	USART_HandleTypeDef* usart_;
+	I2C_HandleTypeDef* i2c_;
 };
 
 /// === Class Declarations	========================================================================
 
+/// TODO : Use derived class for each peripheral
 class PeripheralHandler
 {
 public:
@@ -124,6 +131,18 @@ public:
 	virtual void HAL_USART_ErrorCallback(USART_HandleTypeDef* _husart)
 	{
 		(void) _husart;
+	}
+
+	/// --- I2C Callback	------------------------------------------------------------------------
+
+	virtual void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *_I2C_handle)
+	{
+		(void) _I2C_handle;
+	}
+
+	virtual void HAL_I2C_ErrorCallback(I2C_HandleTypeDef* _I2C_handle)
+	{
+		(void) _I2C_handle;
 	}
 
 private:

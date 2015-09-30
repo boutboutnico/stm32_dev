@@ -1,58 +1,54 @@
 ///
-/// \file	template.hpp
-///	\brief
-///	\date	dd/mm/yyyy
-/// \author	author
+/// \file	lcd_i2c_driver.hpp
+///	\brief	
+///	\date	28/09/2015
+/// \author	nboutin
 ///
-
-#ifndef APPLICATION_COMP1_IMPL_COMP1_TASK_HPP_
-#define APPLICATION_COMP1_IMPL_COMP1_TASK_HPP_
+#ifndef BOARD_DRIVERS_LCD_I2C_DRIVER_HPP_
+#define BOARD_DRIVERS_LCD_I2C_DRIVER_HPP_
 
 /// === Includes	================================================================================
 
-#include "femtin/freeRTOS_wrapper/task/task.hpp"
-#include "system_controller/component_registry.hpp"
-#include "drivers/lcd_i2c_driver.hpp"
+#include "stm32f4xx_hal.h"
+#include "femtin/freeRTOS_wrapper/semaphore/semaphore.hpp"
+#include "peripheral_handler.hpp"
 
 /// === Namespaces	================================================================================
 
-namespace application
+namespace board
 {
 
-namespace comp1
+namespace mcu
 {
 
 /// === Class Declarations	========================================================================
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
-
-class Comp1_Task : public os::Task
+class LCD_I2C_Driver : public PeripheralHandler
 {
 public:
-	/// === Public Constants	====================================================================
 	/// === Public Declarations	====================================================================
 
-	Comp1_Task();
+	LCD_I2C_Driver();
 
-	bool initialize(system_controller::ComponentRegistry& _comp_reg);
-
-	virtual void run();
+	bool initialize();
+	void write(const char* _buf, size_t _size);
 
 private:
 	/// === Private Constants	====================================================================
 	/// === Private Declarations	================================================================
+
+	virtual void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *_I2C_handle);
+	virtual void HAL_I2C_ErrorCallback(I2C_HandleTypeDef* _I2C_handle);
+
 	/// === Private Attributes	====================================================================
 
-	board::mcu::LCD_I2C_Driver lcd_i2c_driver_;
+	I2C_HandleTypeDef I2C_handle_;
+	femtin::os::Semaphore SEM_I2C;
 };
-
-#pragma GCC diagnostic pop
-
 /// === Inlines Definitions	========================================================================
 
 /// ------------------------------------------------------------------------------------------------
-}
-}
+}///mcu
+}    /// board
 #endif
 /// === END OF FILE	================================================================================
