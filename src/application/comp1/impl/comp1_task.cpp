@@ -19,12 +19,10 @@ using namespace application::comp1;
 #include "led/led.hpp"
 
 #include "trace/trace.hpp"
-//#include "diag/Trace.h"
 
 /// === Namespaces	================================================================================
 
 using namespace os;
-//using namespace board::mcu;
 using namespace board::led;
 using namespace application::system_controller;
 using namespace application::trace;
@@ -79,7 +77,8 @@ void Comp1_Task::run()
 	for (;;)
 	{
 		LED_Green.toggle();
-		lcd_i2c_driver_.write("coucou je suis le lapin", 10);
+		lcd_i2c_driver_.clear();
+		lcd_i2c_driver_.write("coucou je suis le lapin", 23);
 		vTaskDelay(xDelay);
 	}
 }

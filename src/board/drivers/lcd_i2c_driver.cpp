@@ -117,6 +117,15 @@ void LCD_I2C_Driver::write(const char* _buf, size_t _size)
 	}
 }
 
+///	------------------------------------------------------------------------------------------------
+
+void LCD_I2C_Driver::clear()
+{
+	char buf[] = {COMMAND, CLEAR};
+	write(buf, 2);
+	/// TODO : delay de 15 ms
+}
+
 /// === Private Definitions	========================================================================
 
 void LCD_I2C_Driver::HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *_I2C_handle)

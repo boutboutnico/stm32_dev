@@ -49,6 +49,8 @@ void ComponentRegistry::run()
 
 	/// --- Initialization	------------------------------------------------------------------------
 
+	trace_printf("==========\tStart\t==========\n");
+
 	/// TODO test with for(IComponent* comp : components) ???
 	for (uint8_t i = 0; i < COMPONENT_COUNT; i++)
 	{
