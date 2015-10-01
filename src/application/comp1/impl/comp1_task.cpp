@@ -23,6 +23,8 @@ using namespace application::comp1;
 /// === Namespaces	================================================================================
 
 using namespace os;
+using namespace femtin::os;
+using namespace femtin::unit;
 using namespace board::led;
 using namespace application::system_controller;
 using namespace application::trace;
@@ -30,8 +32,9 @@ using namespace application::trace;
 /// === Public Definitions	========================================================================
 
 Comp1_Task::Comp1_Task()
-		: Task(application::COMP1_TASK_NAME.c_str(), application::COMP1_TASK_STACK_SIZE,
-				application::COMP1_TASK_PRIO)
+		: 	Task(application::COMP1_TASK_NAME.c_str(), application::COMP1_TASK_STACK_SIZE,
+					application::COMP1_TASK_PRIO),
+			lcd_()
 {
 	suspend();
 }
@@ -41,7 +44,7 @@ Comp1_Task::Comp1_Task()
 bool Comp1_Task::initialize(ComponentRegistry& _comp_reg)
 {
 	(void) _comp_reg;
-	return lcd_i2c_driver_.initialize();
+	return lcd_.initialize();
 }
 
 /// ------------------------------------------------------------------------------------------------
@@ -50,36 +53,62 @@ void Comp1_Task::run()
 {
 	/// --- Initialization	------------------------------------------------------------------------
 
-	const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
+	const millisecond delay { 1000 };
 
-//	uint32_t i = 0;
-//
-//	trace_putc('1');
-//	trace_puts("ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`");
-//	trace_puts("abcdefghijklmnopqrstuvwxyz{|}~");
-//	trace_printf("val=%d\n", i++);
-//	trace_printf("%d\n", 1234);				//"1234"
-//	trace_printf("%6d,%3d%%\n", -200, 5);    //"  -200,  5%"
-//	trace_printf("%-6u\n", 100);			//"100   "
-//	trace_printf("%ld\n", 12345678L);		//"12345678"
-//	trace_printf("%04x\n", 0xA3);			//"00a3"
-//	trace_printf("%08LX\n", 0x123ABC);		//"00123ABC"
-//	trace_printf("%016b\n", 0x550F);		//"0101010100001111"
-//	trace_printf("%s\n", "String");			//"String"
-//	trace_printf("%-4s\n", "abc");			//"abc "
-//	trace_printf("%4s\n", "abc");			//" abc"
-//	trace_printf("%c\n", 'a');				//"a"
-//	trace_printf("%f\n", 10.0);            	//<xprintf lacks floating point support>
-//	vTaskDelay(xDelay);
+	/// --- Infinite Loop	------------------------------------------------------------------------
 
-/// --- Infinite Loop	------------------------------------------------------------------------
+	trace_printf("int8_t: %d\n", sizeof(int8_t));
+	trace_printf("int16_t: %d\n", sizeof(int16_t));
+	trace_printf("int32_t: %d\n", sizeof(int32_t));
+	trace_printf("int: %d\n", sizeof(int));
+	trace_printf("long: %d\n", sizeof(long));
+	trace_printf("long long: %d\n", sizeof(long long));
+
+	lcd_.clear();
 
 	for (;;)
 	{
 		LED_Green.toggle();
-		lcd_i2c_driver_.clear();
-		lcd_i2c_driver_.write("coucou je suis le lapin", 23);
-		vTaskDelay(xDelay);
+
+		lcd_.clear();
+//		lcd_.print("Les Chatons\n");
+//		lcd_.print("Les lapins");
+//		lcd_ << 'f';
+//		lcd_ << "coucou";
+
+		static uint16_t n = 0;
+
+		lcd_.printf("n:%d test", n);
+
+		lcd_.move_to_row(1);
+		lcd_ << 'n' << ':' << n << " test";
+
+		n += 10;
+		task_delay(delay);
+
+//		lcd_.backlight(false);
+//		task_delay(delay);
+//
+//		lcd_.backlight(true);
+//		task_delay(delay);
+//
+//		lcd_.cursor(false);
+//		task_delay(delay);
+//
+//		lcd_.cursor(true);
+//		task_delay(delay);
+//
+//		lcd_.home();
+//		lcd_.print("Home");
+//		task_delay(delay);
+//
+//		lcd_.cursor_xy(10, 2);
+//		lcd_.print("10,2");
+//		task_delay(delay);
+//
+//		lcd_.move_to_row(1);
+//		lcd_.print("row 1");
+//		task_delay(delay);
 	}
 }
 

@@ -12,7 +12,8 @@ using namespace board::mcu;
 
 #include <stdio.h>
 #include <stdarg.h>
-#include "femtin/array.hpp"
+#include <cstring>
+#include "femtin/freeRTOS_wrapper/delay.hpp"
 #include "pinout_mapping.hpp"
 #include "led/led.hpp"
 #include "trace/trace.hpp"
@@ -20,6 +21,8 @@ using namespace board::mcu;
 /// === Namespaces	================================================================================
 
 using namespace femtin;
+using namespace femtin::os;
+using namespace femtin::unit;
 using namespace application::trace;
 
 /// === Public Definitions	========================================================================
@@ -104,14 +107,14 @@ bool CLCD_420B::initialize()
 
 void CLCD_420B::print(const char _c)
 {
-	write(reinterpret_cast<const uint8_t*>(&_c), 1);
+	write(&_c, 1);
 }
 
 ///	------------------------------------------------------------------------------------------------
 
 void CLCD_420B::print(const char* _s)
 {
-	write(reinterpret_cast<const uint8_t*>(_s), strlen(_s));
+	write(_s, strlen(_s));
 }
 
 ///	------------------------------------------------------------------------------------------------
@@ -121,13 +124,10 @@ void CLCD_420B::printf(const char* format, ...)
 	va_list ap;
 	va_start(ap, format);
 
-	static char buf[COLUMN_SIZE * ROW_SIZE];
-
-	uint32_t ret = vsnprintf(buf, sizeof(buf), format, ap);
+	uint32_t ret = vsnprintf(buffer_format_, sizeof(buffer_format_), format, ap);
 	if (ret > 0)
 	{
-		/// Transfer the buffer to the device
-		write(reinterpret_cast<const uint8_t*>(buf), strlen(buf));
+		write(buffer_format_, ret);
 	}
 
 	va_end(ap);
@@ -135,53 +135,114 @@ void CLCD_420B::printf(const char* format, ...)
 
 ///	------------------------------------------------------------------------------------------------
 
+void CLCD_420B::print(int8_t _n)
+{
+	print(static_cast<int32_t>(_n));
+}
+
+///	------------------------------------------------------------------------------------------------
+
+void CLCD_420B::print(int16_t _n)
+{
+	print(static_cast<int32_t>(_n));
+}
+
+///	------------------------------------------------------------------------------------------------
+
+void CLCD_420B::print(int32_t _n)
+{
+	uint32_t ret = snprintf(buffer_format_, sizeof(buffer_format_), "%ld", _n);
+	if (ret > 0)
+	{
+		write(buffer_format_, ret);
+	}
+}
+
+///	------------------------------------------------------------------------------------------------
+
+void CLCD_420B::print(uint8_t _n)
+{
+	print(static_cast<uint32_t>(_n));
+}
+
+///	------------------------------------------------------------------------------------------------
+
+void CLCD_420B::print(uint16_t _n)
+{
+	print(static_cast<uint32_t>(_n));
+}
+
+///	------------------------------------------------------------------------------------------------
+
+void CLCD_420B::print(uint32_t _n)
+{
+	uint32_t ret = snprintf(buffer_format_, sizeof(buffer_format_), "%lu", _n);
+	if (ret > 0)
+	{
+		write(buffer_format_, ret);
+	}
+}
+
+///	------------------------------------------------------------------------------------------------
+
+void CLCD_420B::print(float _n)
+{
+	uint32_t ret = snprintf(buffer_format_, sizeof(buffer_format_), "%f", _n);
+	if (ret > 0)
+	{
+		write(buffer_format_, ret);
+	}
+}
+
+///	------------------------------------------------------------------------------------------------
+
 void CLCD_420B::clear()
 {
-	buffer_[0] = COMMAND;
-	buffer_[1] = CLEAR;
-	write(buffer_, 2);
-	/// TODO : add delay 15 ms
+	buffer_write_[0] = COMMAND;
+	buffer_write_[1] = CLEAR;
+	write(buffer_write_, 2);
+	task_delay(millisecond(15));
 }
 
 ///	------------------------------------------------------------------------------------------------
 
 void CLCD_420B::backlight(const bool _is_on)
 {
-	buffer_[0] = COMMAND;
-	buffer_[1] = _is_on ? BACKLIGHT_ON : BACKLIGHT_OFF;
-	write(buffer_, 2);
+	buffer_write_[0] = COMMAND;
+	buffer_write_[1] = _is_on ? BACKLIGHT_ON : BACKLIGHT_OFF;
+	write(buffer_write_, 2);
 }
 
 ///	------------------------------------------------------------------------------------------------
 
 void CLCD_420B::cursor(const bool _is_on)
 {
-	buffer_[0] = COMMAND;
-	buffer_[1] = _is_on ? CURSOR_ON : CURSOR_OFF;
-	write(buffer_, 2);
+	buffer_write_[0] = COMMAND;
+	buffer_write_[1] = _is_on ? CURSOR_ON : CURSOR_OFF;
+	write(buffer_write_, 2);
 }
 
 ///	------------------------------------------------------------------------------------------------
 
 void CLCD_420B::home()
 {
-	buffer_[0] = COMMAND;
-	buffer_[1] = HOME;
-	write(buffer_, 2);
+	buffer_write_[0] = COMMAND;
+	buffer_write_[1] = HOME;
+	write(buffer_write_, 2);
 }
 
 ///	------------------------------------------------------------------------------------------------
 
-void CLCD_420B::cursor_XY(uint8_t _x, uint8_t _y)
+void CLCD_420B::cursor_xy(uint8_t _x, uint8_t _y)
 {
-	assert(_x < COLUMN_SIZE);
-	assert(_y < ROW_SIZE);
+	assert(_x < COLUMN_NUMBER);
+	assert(_y < ROW_NUMBER);
 
-	buffer_[0] = COMMAND;
-	buffer_[1] = CURSOR_POS;
-	buffer_[2] = _x;
-	buffer_[3] = _y;
-	write(buffer_, 4);
+	buffer_write_[0] = COMMAND;
+	buffer_write_[1] = CURSOR_POS;
+	buffer_write_[2] = _x;
+	buffer_write_[3] = _y;
+	write(buffer_write_, 4);
 	/// TODO : add delay 100us
 }
 
@@ -189,10 +250,10 @@ void CLCD_420B::cursor_XY(uint8_t _x, uint8_t _y)
 
 void CLCD_420B::move_to_row(uint8_t _y)
 {
-	assert(_y < ROW_SIZE);
+	assert(_y < ROW_NUMBER);
 
-	buffer_[0] = static_cast<char>(_y + 1);
-	write(buffer_, 1);
+	buffer_write_[0] = static_cast<char>(_y + 1);
+	write(buffer_write_, 1);
 }
 
 ///	------------------------------------------------------------------------------------------------
@@ -229,8 +290,8 @@ void CLCD_420B::call_custom(uint8_t _code)
 {
 	assert(_code >= 8 && _code <= 15);
 
-	buffer_[0] = _code;
-	write(buffer_, 1);
+	buffer_write_[0] = _code;
+	write(buffer_write_, 1);
 }
 
 /// === Private Definitions	========================================================================
@@ -238,6 +299,7 @@ void CLCD_420B::call_custom(uint8_t _code)
 void CLCD_420B::write(const uint8_t* _buf, size_t _size)
 {
 // HAL_StatusTypeDef HAL_I2C_Master_Transmit_IT(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint8_t *pData, uint16_t Size);
+
 	if (HAL_I2C_Master_Transmit_IT(&I2C_handle_, LCD_I2C_Address << 1, const_cast<uint8_t*>(_buf),
 									_size)
 		!= HAL_OK)
