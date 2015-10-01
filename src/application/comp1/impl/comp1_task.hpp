@@ -12,7 +12,7 @@
 
 #include "femtin/freeRTOS_wrapper/task/task.hpp"
 #include "system_controller/component_registry.hpp"
-#include "drivers/lcd_i2c_driver.hpp"
+#include "drivers/clcd_420b.hpp"
 
 /// === Namespaces	================================================================================
 
@@ -44,7 +44,7 @@ private:
 	/// === Private Declarations	================================================================
 	/// === Private Attributes	====================================================================
 
-	board::mcu::LCD_I2C_Driver lcd_i2c_driver_;
+	board::mcu::CLCD_420B lcd_;
 };
 
 #pragma GCC diagnostic pop

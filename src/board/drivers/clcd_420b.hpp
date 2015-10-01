@@ -4,8 +4,8 @@
 ///	\date	28/09/2015
 /// \author	nboutin
 ///
-#ifndef BOARD_DRIVERS_LCD_I2C_DRIVER_HPP_
-#define BOARD_DRIVERS_LCD_I2C_DRIVER_HPP_
+#ifndef BOARD_DRIVERS_CLCD_420B_HPP_
+#define BOARD_DRIVERS_CLCD_420B_HPP_
 
 /// === Includes	================================================================================
 
@@ -23,20 +23,36 @@ namespace mcu
 
 /// === Class Declarations	========================================================================
 
-class LCD_I2C_Driver : public PeripheralHandler
+class CLCD_420B : public PeripheralHandler
 {
 public:
+	/// === Public Constants	====================================================================
+
+	static const uint8_t COLUMN_SIZE = 20;
+	static const uint8_t ROW_SIZE = 4;
+
 	/// === Public Declarations	====================================================================
 
-	LCD_I2C_Driver();
+	CLCD_420B();
 
 	bool initialize();
-	void write(const char* _buf, size_t _size);
 
+	void print(char _c);
+	void print(const char* _s);
+	void printf(const char* format, ...);
 	void clear();
+	void backlight(bool _is_on);
+	void cursor(bool _is_on);
+	void home();
+	void cursor_XY(uint8_t _x, uint8_t _y);
+	void move_to_row(uint8_t _y);
+	void store_custom(uint8_t _code, const uint8_t* _data);
+	void call_custom(uint8_t _code);
 
 private:
 	/// === Private Constants	====================================================================
+
+	static const uint8_t BUFFER_SIZE = 4;
 
 	static const uint8_t ROW_0 = 0x01;
 	static const uint8_t ROW_1 = 0x02;
@@ -54,11 +70,14 @@ private:
 
 	/// === Private Declarations	================================================================
 
+	void write(const uint8_t* _buf, size_t _size);
+
 	virtual void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *_I2C_handle);
 	virtual void HAL_I2C_ErrorCallback(I2C_HandleTypeDef* _I2C_handle);
 
 	/// === Private Attributes	====================================================================
 
+	uint8_t buffer_[BUFFER_SIZE];
 	I2C_HandleTypeDef I2C_handle_;
 	femtin::os::Semaphore SEM_I2C;
 };
