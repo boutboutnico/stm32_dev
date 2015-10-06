@@ -39,18 +39,7 @@ public:
 
 	bool initialize();
 
-//	void print(char _c);
-//	void print(const char* _s);
-//	void printf(const char* format, ...);
-//	void print(int8_t _n);
-//	void print(int16_t _n);
-//	void print(int32_t _n);
-//	void print(uint8_t _n);
-//	void print(uint16_t _n);
-//	void print(uint32_t _n);
-//	void print(float _n);
-
-///	--- Operations	----------------------------------------------------------------------------
+	///	--- Operations	----------------------------------------------------------------------------
 
 	void clear();
 	void backlight(bool _is_on);
@@ -61,6 +50,19 @@ public:
 	void next_row();
 	void store_custom(uint8_t _code, const uint8_t* _data);
 	void call_custom(uint8_t _code);
+
+//	CLCD_420B& operator<<(CLCD_420B& (*_pf)(CLCD_420B&))
+//	{
+//		return _pf(*this);
+//	}
+
+//	CLCD_420B& operator<<(femtin::ostream& (*_pf)(femtin::ostream&))
+//	{
+//		_pf(*this);
+//		return *this;
+//	}
+
+	virtual ostream& endl();
 
 private:
 	/// === Private Constants	====================================================================
@@ -84,6 +86,7 @@ private:
 	/// === Private Declarations	================================================================
 
 	virtual void write(const char* _s, size_t _size);
+
 	void write(const uint8_t* _buf, size_t _size);
 
 	virtual void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *_I2C_handle);
@@ -92,7 +95,6 @@ private:
 	/// === Private Attributes	====================================================================
 
 	uint8_t buffer_write_[BUFFER_SIZE];
-//	char buffer_format_[COLUMN_NUMBER * ROW_NUMBER];
 	femtin::Array<char, COLUMN_NUMBER * ROW_NUMBER> buffer_;
 	uint8_t current_row_;
 	I2C_HandleTypeDef I2C_handle_;
@@ -106,12 +108,17 @@ inline void CLCD_420B::write(const char* _s, size_t _size)
 	write(reinterpret_cast<const uint8_t*>(_s), _size);
 }
 
+inline femtin::ostream& CLCD_420B::endl()
+{
+	next_row();
+	return *this;
+}
+
 /// === Non-Members functions	====================================================================
 
-//template<class T>
-//inline CLCD_420B& operator<<(CLCD_420B& _stream, T _arg)
+//inline femtin::ostream& endl(CLCD_420B& _stream)
 //{
-//	_stream.print(_arg);
+//	_stream.next_row();
 //	return _stream;
 //}
 
