@@ -53,7 +53,7 @@ void Comp1_Task::run()
 {
 	/// --- Initialization	------------------------------------------------------------------------
 
-	const millisecond delay { 1000 };
+	const millisecond delay { 500 };
 
 	/// --- Infinite Loop	------------------------------------------------------------------------
 
@@ -73,29 +73,40 @@ void Comp1_Task::run()
 
 		char c = 'a';
 		lcd_ << c << ' ' << 'c' << endl;
+		task_delay(delay);
 
 		const char* s = "coucou";
 		char str[] = "salut ";
 		lcd_ << s << ' ' << str << ' ' << "string" << endl;
+		task_delay(delay);
 
 		int8_t v_int8 = -12;
 		uint8_t v_uint8 = 34;
 		lcd_ << v_int8 << ' ' << v_uint8 << endl;
+		task_delay(delay);
 
 		int16_t v_int16 = -345;
 		uint16_t v_uint16 = 456;
 		lcd_ << v_int16 << ' ' << v_uint16 << endl;
+		task_delay(delay);
 
 		int32_t v_int32 = -71234;
 		uint32_t v_uint32 = 86456;
 		lcd_ << v_int32 << ' ' << v_uint32 << endl;
+		task_delay(delay);
 
 		lcd_ << ios_base::hex << v_uint16 << endl;
 		lcd_ << ios_base::oct << v_uint16 << endl;
 		lcd_ << ios_base::dec << v_uint16 << endl;
+		task_delay(delay);
 
 		lcd_ << width(4) << 43 << endl;
+		task_delay(delay);
 
+		lcd_ << xy(10, 2) << "10,2" << endl;
+		task_delay(delay);
+
+		lcd_ << row(3) << "row 3" << endl;
 		task_delay(delay);
 
 //		lcd_.backlight(false);
