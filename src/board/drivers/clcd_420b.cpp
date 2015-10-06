@@ -28,7 +28,13 @@ using namespace application::trace;
 /// === Public Definitions	========================================================================
 
 CLCD_420B::CLCD_420B()
-		: PeripheralHandler(LCD_I2C_e, &I2C_handle_), SEM_I2C(0)
+		: PeripheralHandler(LCD_I2C_e, &I2C_handle_), ostream(buffer_), current_row_(0), SEM_I2C(0)
+{
+}
+
+/// ------------------------------------------------------------------------------------------------
+
+CLCD_420B::~CLCD_420B()
 {
 }
 
@@ -103,101 +109,103 @@ bool CLCD_420B::initialize()
 	return true;
 }
 
-/// ------------------------------------------------------------------------------------------------
+/*
+ /// ------------------------------------------------------------------------------------------------
 
-void CLCD_420B::print(const char _c)
-{
-	write(&_c, 1);
-}
+ void CLCD_420B::print(const char _c)
+ {
+ write(&_c, 1);
+ }
 
+ ///	------------------------------------------------------------------------------------------------
+
+ void CLCD_420B::print(const char* _s)
+ {
+ write(_s, strlen(_s));
+ }
+
+ ///	------------------------------------------------------------------------------------------------
+
+ void CLCD_420B::printf(const char* format, ...)
+ {
+ va_list ap;
+ va_start(ap, format);
+
+ uint32_t ret = vsnprintf(buffer_format_, sizeof(buffer_format_), format, ap);
+ if (ret > 0)
+ {
+ write(buffer_format_, ret);
+ }
+
+ va_end(ap);
+ }
+
+ ///	------------------------------------------------------------------------------------------------
+
+ void CLCD_420B::print(int8_t _n)
+ {
+ print(static_cast<int32_t>(_n));
+ }
+
+ ///	------------------------------------------------------------------------------------------------
+
+ void CLCD_420B::print(int16_t _n)
+ {
+ print(static_cast<int32_t>(_n));
+ }
+
+ ///	------------------------------------------------------------------------------------------------
+
+ void CLCD_420B::print(int32_t _n)
+ {
+ uint32_t ret = snprintf(buffer_format_, sizeof(buffer_format_), "%ld", _n);
+ if (ret > 0)
+ {
+ write(buffer_format_, ret);
+ }
+ }
+
+ ///	------------------------------------------------------------------------------------------------
+
+ void CLCD_420B::print(uint8_t _n)
+ {
+ print(static_cast<uint32_t>(_n));
+ }
+
+ ///	------------------------------------------------------------------------------------------------
+
+ void CLCD_420B::print(uint16_t _n)
+ {
+ print(static_cast<uint32_t>(_n));
+ }
+
+ ///	------------------------------------------------------------------------------------------------
+
+ void CLCD_420B::print(uint32_t _n)
+ {
+ uint32_t ret = snprintf(buffer_format_, sizeof(buffer_format_), "%lu", _n);
+ if (ret > 0)
+ {
+ write(buffer_format_, ret);
+ }
+ }
+
+ ///	------------------------------------------------------------------------------------------------
+
+ void CLCD_420B::print(float _n)
+ {
+ uint32_t ret = snprintf(buffer_format_, sizeof(buffer_format_), "%f", _n);
+ if (ret > 0)
+ {
+ write(buffer_format_, ret);
+ }
+ }
+ */
 ///	------------------------------------------------------------------------------------------------
-
-void CLCD_420B::print(const char* _s)
-{
-	write(_s, strlen(_s));
-}
-
-///	------------------------------------------------------------------------------------------------
-
-void CLCD_420B::printf(const char* format, ...)
-{
-	va_list ap;
-	va_start(ap, format);
-
-	uint32_t ret = vsnprintf(buffer_format_, sizeof(buffer_format_), format, ap);
-	if (ret > 0)
-	{
-		write(buffer_format_, ret);
-	}
-
-	va_end(ap);
-}
-
-///	------------------------------------------------------------------------------------------------
-
-void CLCD_420B::print(int8_t _n)
-{
-	print(static_cast<int32_t>(_n));
-}
-
-///	------------------------------------------------------------------------------------------------
-
-void CLCD_420B::print(int16_t _n)
-{
-	print(static_cast<int32_t>(_n));
-}
-
-///	------------------------------------------------------------------------------------------------
-
-void CLCD_420B::print(int32_t _n)
-{
-	uint32_t ret = snprintf(buffer_format_, sizeof(buffer_format_), "%ld", _n);
-	if (ret > 0)
-	{
-		write(buffer_format_, ret);
-	}
-}
-
-///	------------------------------------------------------------------------------------------------
-
-void CLCD_420B::print(uint8_t _n)
-{
-	print(static_cast<uint32_t>(_n));
-}
-
-///	------------------------------------------------------------------------------------------------
-
-void CLCD_420B::print(uint16_t _n)
-{
-	print(static_cast<uint32_t>(_n));
-}
-
-///	------------------------------------------------------------------------------------------------
-
-void CLCD_420B::print(uint32_t _n)
-{
-	uint32_t ret = snprintf(buffer_format_, sizeof(buffer_format_), "%lu", _n);
-	if (ret > 0)
-	{
-		write(buffer_format_, ret);
-	}
-}
-
-///	------------------------------------------------------------------------------------------------
-
-void CLCD_420B::print(float _n)
-{
-	uint32_t ret = snprintf(buffer_format_, sizeof(buffer_format_), "%f", _n);
-	if (ret > 0)
-	{
-		write(buffer_format_, ret);
-	}
-}
-
-///	------------------------------------------------------------------------------------------------
-
 void CLCD_420B::clear()
 {
+	current_row_ = 0;
+
 	buffer_write_[0] = COMMAND;
 	buffer_write_[1] = CLEAR;
 	write(buffer_write_, 2);
@@ -226,6 +234,8 @@ void CLCD_420B::cursor(const bool _is_on)
 
 void CLCD_420B::home()
 {
+	current_row_ = 0;
+
 	buffer_write_[0] = COMMAND;
 	buffer_write_[1] = HOME;
 	write(buffer_write_, 2);
@@ -237,6 +247,8 @@ void CLCD_420B::cursor_xy(uint8_t _x, uint8_t _y)
 {
 	assert(_x < COLUMN_NUMBER);
 	assert(_y < ROW_NUMBER);
+
+	current_row_ = _y;
 
 	buffer_write_[0] = COMMAND;
 	buffer_write_[1] = CURSOR_POS;
@@ -252,8 +264,22 @@ void CLCD_420B::move_to_row(uint8_t _y)
 {
 	assert(_y < ROW_NUMBER);
 
+	current_row_ = _y;
+
 	buffer_write_[0] = static_cast<char>(_y + 1);
 	write(buffer_write_, 1);
+}
+
+///	------------------------------------------------------------------------------------------------
+
+void CLCD_420B::next_row()
+{
+	if (++current_row_ >= ROW_NUMBER)
+	{
+		current_row_ = 0;
+	}
+
+	move_to_row(current_row_);
 }
 
 ///	------------------------------------------------------------------------------------------------
@@ -301,7 +327,7 @@ void CLCD_420B::write(const uint8_t* _buf, size_t _size)
 // HAL_StatusTypeDef HAL_I2C_Master_Transmit_IT(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint8_t *pData, uint16_t Size);
 
 	if (HAL_I2C_Master_Transmit_IT(&I2C_handle_, LCD_I2C_Address << 1, const_cast<uint8_t*>(_buf),
-									_size)
+									static_cast<uint16_t>(_size))
 		!= HAL_OK)
 	{
 		board::led::LED_Red.on();

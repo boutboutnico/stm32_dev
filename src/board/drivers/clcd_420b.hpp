@@ -10,6 +10,7 @@
 /// === Includes	================================================================================
 
 #include "stm32f4xx_hal.h"
+#include "femtin/ostream.hpp"
 #include "femtin/freeRTOS_wrapper/semaphore/semaphore.hpp"
 #include "peripheral_handler.hpp"
 
@@ -23,7 +24,7 @@ namespace mcu
 
 /// === Class Declarations	========================================================================
 
-class CLCD_420B : public PeripheralHandler
+class CLCD_420B : public PeripheralHandler, public femtin::ostream
 {
 public:
 	/// === Public Constants	====================================================================
@@ -34,21 +35,22 @@ public:
 	/// === Public Declarations	====================================================================
 
 	CLCD_420B();
+	virtual ~CLCD_420B();
 
 	bool initialize();
 
-	void print(char _c);
-	void print(const char* _s);
-	void printf(const char* format, ...);
-	void print(int8_t _n);
-	void print(int16_t _n);
-	void print(int32_t _n);
-	void print(uint8_t _n);
-	void print(uint16_t _n);
-	void print(uint32_t _n);
-	void print(float _n);
+//	void print(char _c);
+//	void print(const char* _s);
+//	void printf(const char* format, ...);
+//	void print(int8_t _n);
+//	void print(int16_t _n);
+//	void print(int32_t _n);
+//	void print(uint8_t _n);
+//	void print(uint16_t _n);
+//	void print(uint32_t _n);
+//	void print(float _n);
 
-	///	--- Operations	----------------------------------------------------------------------------
+///	--- Operations	----------------------------------------------------------------------------
 
 	void clear();
 	void backlight(bool _is_on);
@@ -56,6 +58,7 @@ public:
 	void home();
 	void cursor_xy(uint8_t _x, uint8_t _y);
 	void move_to_row(uint8_t _y);
+	void next_row();
 	void store_custom(uint8_t _code, const uint8_t* _data);
 	void call_custom(uint8_t _code);
 
@@ -80,7 +83,7 @@ private:
 
 	/// === Private Declarations	================================================================
 
-	void write(const char* _s, size_t _size);
+	virtual void write(const char* _s, size_t _size);
 	void write(const uint8_t* _buf, size_t _size);
 
 	virtual void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *_I2C_handle);
@@ -89,7 +92,9 @@ private:
 	/// === Private Attributes	====================================================================
 
 	uint8_t buffer_write_[BUFFER_SIZE];
-	char buffer_format_[COLUMN_NUMBER * ROW_NUMBER];
+//	char buffer_format_[COLUMN_NUMBER * ROW_NUMBER];
+	femtin::Array<char, COLUMN_NUMBER * ROW_NUMBER> buffer_;
+	uint8_t current_row_;
 	I2C_HandleTypeDef I2C_handle_;
 	femtin::os::Semaphore SEM_I2C;
 };
@@ -103,12 +108,12 @@ inline void CLCD_420B::write(const char* _s, size_t _size)
 
 /// === Non-Members functions	====================================================================
 
-template<class T>
-inline CLCD_420B& operator<<(CLCD_420B& _stream, T _arg)
-{
-	_stream.print(_arg);
-	return _stream;
-}
+//template<class T>
+//inline CLCD_420B& operator<<(CLCD_420B& _stream, T _arg)
+//{
+//	_stream.print(_arg);
+//	return _stream;
+//}
 
 /// ------------------------------------------------------------------------------------------------
 }///mcu

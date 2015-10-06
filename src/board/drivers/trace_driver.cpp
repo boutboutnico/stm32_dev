@@ -25,7 +25,9 @@ TraceDriver::TraceDriver()
 
 void TraceDriver::write(const char* _buf, size_t _size)
 {
-	if (HAL_UART_Transmit_IT(&UART_handle_, reinterpret_cast<const uint8_t*>(_buf), _size) != HAL_OK)
+	if (HAL_UART_Transmit_IT(&UART_handle_, reinterpret_cast<const uint8_t*>(_buf),
+								static_cast<uint16_t>(_size))
+		!= HAL_OK)
 	{
 		board::led::LED_Red.on();
 	}
