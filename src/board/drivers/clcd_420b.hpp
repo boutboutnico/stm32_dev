@@ -123,6 +123,45 @@ inline femtin::ostream& CLCD_420B::endl()
 //}
 
 /// ------------------------------------------------------------------------------------------------
+
+struct _set_xy
+{
+	uint8_t x_;
+	uint8_t y_;
+};
+
+inline _set_xy xy(uint8_t _x, uint8_t _y)
+{
+	return
+	{	_x, _y};
+}
+
+inline CLCD_420B& operator<<(CLCD_420B& _stream, _set_xy _xy)
+{
+	_stream.cursor_xy(_xy.x_, _xy.y_);
+	return _stream;
+}
+
+/// ------------------------------------------------------------------------------------------------
+
+struct _set_row
+{
+	uint8_t y_;
+};
+
+inline _set_row row(uint8_t _y)
+{
+	return
+	{	_y};
+}
+
+inline CLCD_420B& operator<<(CLCD_420B& _stream, _set_row _y)
+{
+	_stream.move_to_row(_y.y_);
+	return _stream;
+}
+
+/// ------------------------------------------------------------------------------------------------
 }///mcu
 }    /// board
 #endif
