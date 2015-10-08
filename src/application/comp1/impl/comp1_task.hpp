@@ -12,7 +12,6 @@
 
 #include "femtin/freeRTOS_wrapper/task/task.hpp"
 #include "system_controller/component_registry.hpp"
-#include "drivers/clcd_420b.hpp"
 
 /// === Namespaces	================================================================================
 
@@ -43,8 +42,6 @@ private:
 	/// === Private Constants	====================================================================
 	/// === Private Declarations	================================================================
 	/// === Private Attributes	====================================================================
-
-	board::mcu::CLCD_420B lcd_;
 };
 
 #pragma GCC diagnostic pop
