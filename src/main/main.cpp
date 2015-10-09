@@ -9,12 +9,11 @@
 
 #include "FreeRTOS.h"
 #include "system_controller/component_registry.hpp"
-#include "trace/trace.hpp"
+#include "bsp/trace_uart/trace_uart.hpp"
 
 /// === Namespaces	================================================================================
 
 using namespace application::system_controller;
-using namespace application::trace;
 
 /// === Public Definitions	========================================================================
 
@@ -27,7 +26,7 @@ int main(int argc, char* argv[])
 {
 	/// At this stage the system clock should have already been configured at high speed.
 
-	trace_initialize();
+	board::mcu::trace.initialize(115200);
 
 	static ComponentRegistry comp_reg;
 

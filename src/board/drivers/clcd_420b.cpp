@@ -239,7 +239,7 @@ void CLCD_420B::write(const uint8_t* _buf, size_t _size)
 		!= HAL_OK)
 	{
 		board::led::LED_Red.on();
-		trace_printf("I2C Error: %d\n", HAL_I2C_GetError(&I2C_handle_));
+//		trace_printf("I2C Error: %d\n", HAL_I2C_GetError(&I2C_handle_));
 	}
 
 	if (SEM_I2C.take(femtin::unit::millisecond(200)) == false)

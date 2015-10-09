@@ -15,12 +15,15 @@ using namespace application::system_controller;
 //#include "../tic_reader/impl/tic_reader_component.hpp"
 //#include "../logger/impl/logger_component.hpp"
 
-#include "../trace/trace.hpp"
+//#include "../trace/trace.hpp"
+#include "bsp/trace_uart/trace_uart.hpp"
 
 /// === Namespaces	================================================================================
 
 using namespace os;
-using namespace application::trace;
+
+using namespace femtin;
+using namespace board::mcu;
 
 /// === Constants	================================================================================
 
@@ -49,21 +52,26 @@ void ComponentRegistry::run()
 
 	/// --- Initialization	------------------------------------------------------------------------
 
-	trace_printf("==========\tStart\t==========\n");
+	trace << "==========\tStart\t==========" << endl;
 
 	/// TODO test with for(IComponent* comp : components) ???
 	for (uint8_t i = 0; i < COMPONENT_COUNT; i++)
 	{
 		components_[i]->initialize(*this) ?
-				trace_printf("[%s]\tInitialized\n", components_[i]->name().c_str()) :
-				trace_printf("[%s]\t!!! NOT initialized !!!\n", components_[i]->name().c_str());
+//				trace_printf("[%s]\tInitialized\n", components_[i]->name().c_str()) :
+//				trace_printf("[%s]\t!!! NOT initialized !!!\n", components_[i]->name().c_str());
+				trace << "[" << components_[i]->name().c_str() << "]\tInitialized" << endl :
+				trace << "[" << components_[i]->name().c_str() << "]\t!!! NOT initialized !!!"
+						<< endl;
 	}
 
 	for (uint8_t i = 0; i < COMPONENT_COUNT; i++)
 	{
 		components_[i]->start() ?
-				trace_printf("[%s]\tStarted\n", components_[i]->name().c_str()) :
-				trace_printf("[%s]\t!!! NOT started !!!\n", components_[i]->name().c_str());
+//				trace_printf("[%s]\tStarted\n", components_[i]->name().c_str()) :
+//				trace_printf("[%s]\t!!! NOT started !!!\n", components_[i]->name().c_str());
+				trace << "[" << components_[i]->name().c_str() << "]\tStarted" << endl :
+				trace << "[" << components_[i]->name().c_str() << "]\t!!! NOT started !!!" << endl;
 	}
 
 	/// --- Infinite Loop	------------------------------------------------------------------------

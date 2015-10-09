@@ -35,7 +35,7 @@ public:
 	/// === Public Declarations	====================================================================
 
 	CLCD_420B();
-	virtual ~CLCD_420B();
+	virtual ~CLCD_420B();    /// TODO useless ?
 
 	bool initialize();
 
@@ -85,9 +85,7 @@ private:
 
 	/// === Private Declarations	================================================================
 
-	virtual void write(const char* _s, size_t _size);
-
-	void write(const uint8_t* _buf, size_t _size);
+	virtual void write(const uint8_t* _buf, size_t _size);
 
 	virtual void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *_I2C_handle);
 	virtual void HAL_I2C_ErrorCallback(I2C_HandleTypeDef* _I2C_handle);
@@ -101,12 +99,6 @@ private:
 	femtin::os::Semaphore SEM_I2C;
 };
 /// === Inlines Definitions	========================================================================
-
-///	Centralized cast from char* to uint8_t*
-inline void CLCD_420B::write(const char* _s, size_t _size)
-{
-	write(reinterpret_cast<const uint8_t*>(_s), _size);
-}
 
 inline femtin::ostream& CLCD_420B::endl()
 {
