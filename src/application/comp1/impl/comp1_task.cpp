@@ -12,7 +12,8 @@ using namespace application::comp1;
 
 #include "appli_conf.hpp"
 //#include "demo/led/led_demo.hpp"
-#include "demo/trace_uart/trace_uart_demo.hpp"
+//#include "demo/trace_uart/trace_uart_demo.hpp"
+#include "demo/clcd_420b/clcd_demo.hpp"
 
 /// === Namespaces	================================================================================
 /// === Public Definitions	========================================================================
@@ -37,7 +38,8 @@ bool Comp1_Task::initialize(application::system_controller::ComponentRegistry& _
 void Comp1_Task::run()
 {
 //	demo::led::led_demo();
-	demo::trace_uart::trace_uart_demo();
+//	demo::trace_uart::trace_uart_demo();
+	demo::clcd_420b::clcd_demo();
 }
 
 /// === END OF FILE	================================================================================
