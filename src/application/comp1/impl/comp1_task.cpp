@@ -11,9 +11,9 @@ using namespace application::comp1;
 /// === Includes	================================================================================
 
 #include "appli_conf.hpp"
-//#include "demo/led/led_demo.hpp"
-//#include "demo/trace_uart/trace_uart_demo.hpp"
-//#include "demo/clcd_420b/clcd_demo.hpp"
+#include "demo/led/led_demo.hpp"
+#include "demo/trace_uart/trace_uart_demo.hpp"
+#include "demo/clcd_420b/clcd_demo.hpp"
 #include "demo/joystick_thumb/joystick_demo.hpp"
 
 /// === Namespaces	================================================================================
