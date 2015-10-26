@@ -17,16 +17,12 @@
 
 namespace application
 {
-
 namespace comp1
 {
 
 /// === Class Declarations	========================================================================
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
-
-class Comp1_Task : public os::Task
+class Comp1_Task : public femtin::os::Task
 {
 public:
 	/// === Public Constants	====================================================================
@@ -43,8 +39,6 @@ private:
 	/// === Private Declarations	================================================================
 	/// === Private Attributes	====================================================================
 };
-
-#pragma GCC diagnostic pop
 
 /// === Inlines Definitions	========================================================================
 

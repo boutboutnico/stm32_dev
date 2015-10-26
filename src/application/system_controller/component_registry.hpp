@@ -55,7 +55,7 @@ enum class ComponentName_e
 
 /// === Class Declarations	========================================================================
 
-class ComponentRegistry : public os::Task
+class ComponentRegistry : public femtin::os::Task
 {
 public:
 	/// === Constants	============================================================================

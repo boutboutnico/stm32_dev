@@ -20,8 +20,6 @@ using namespace application::system_controller;
 
 /// === Namespaces	================================================================================
 
-using namespace os;
-
 using namespace femtin;
 using namespace board::mcu;
 
