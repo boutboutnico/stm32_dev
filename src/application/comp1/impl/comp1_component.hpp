@@ -37,7 +37,9 @@ public:
 
 	virtual const femtin::String<COMPONENT_NAME_LEN_MAX>& name() const;
 
-	virtual void* getAPIService();
+	virtual void* get_API_service();
+
+	virtual const femtin::os::Task& get_task() const;
 
 	virtual bool initialize(system_controller::ComponentRegistry& _comp_reg);
 
@@ -53,6 +55,11 @@ private:
 };
 
 /// === Inlines Declarations	====================================================================
+
+inline const femtin::os::Task& Comp1_Component::get_task() const
+{
+	return task_;
+}
 
 /// ------------------------------------------------------------------------------------------------
 }/// name

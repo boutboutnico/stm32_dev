@@ -34,11 +34,13 @@ public:
 
 	virtual const femtin::String<COMPONENT_NAME_LEN_MAX>& name() const = 0;
 
-	virtual void* getAPIService()
+	virtual void* get_API_service()
 	{
 		assert(false);
 		return NULL;
 	}
+
+	virtual const femtin::os::Task& get_task() const = 0;
 
 	virtual bool initialize(ComponentRegistry& _comp_reg) = 0;
 

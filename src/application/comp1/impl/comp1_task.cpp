@@ -16,6 +16,10 @@ using namespace application::comp1;
 #include "demo/clcd_420b/clcd_demo.hpp"
 #include "demo/joystick_thumb/joystick_demo.hpp"
 
+#include "bsp/trace_uart/trace_uart.hpp"
+using namespace board::mcu;
+using namespace femtin;
+
 /// === Namespaces	================================================================================
 /// === Public Definitions	========================================================================
 
@@ -38,9 +42,9 @@ bool Comp1_Task::initialize(application::system_controller::ComponentRegistry& _
 
 void Comp1_Task::run()
 {
-//	demo::led::led_demo();
-//	demo::trace_uart::trace_uart_demo();
-//	demo::clcd_420b::clcd_demo();
+////	demo::led::led_demo();
+////	demo::trace_uart::trace_uart_demo();
+////	demo::clcd_420b::clcd_demo();
 	demo::joystick::joystick_demo();
 }
 

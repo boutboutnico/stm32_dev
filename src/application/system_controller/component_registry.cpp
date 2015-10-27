@@ -10,6 +10,7 @@ using namespace application::system_controller;
 
 /// === Includes	================================================================================
 
+#include "femtin/freeRTOS_wrapper/delay.hpp"
 #include "../appli_conf.hpp"
 #include "../comp1/impl/comp1_component.hpp"
 //#include "../tic_reader/impl/tic_reader_component.hpp"
@@ -31,9 +32,10 @@ const uint8_t Comp1_id = static_cast<uint8_t>(ComponentName_e::Comp1);
 /// === Public Definitions	========================================================================
 
 ComponentRegistry::ComponentRegistry()
-		: Task(application::COMPONENT_REGISTRY_TASK_NAME.c_str(),
-				application::COMPONENT_REGISTRY_TASK_STACK_SIZE,
-				application::COMPONENT_REGISTRY_TASK_PRIO)
+		: 	Task(application::COMPONENT_REGISTRY_TASK_NAME.c_str(),
+					application::COMPONENT_REGISTRY_TASK_STACK_SIZE,
+					application::COMPONENT_REGISTRY_TASK_PRIO),
+			components_()
 {
 	static comp1::Comp1_Component comp1;
 //	static logger::LoggerComponent logger;
@@ -46,8 +48,6 @@ ComponentRegistry::ComponentRegistry()
 
 void ComponentRegistry::run()
 {
-	const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
-
 	/// --- Initialization	------------------------------------------------------------------------
 
 	trace << "==========\tStart\t==========" << endl;
@@ -56,8 +56,6 @@ void ComponentRegistry::run()
 	for (uint8_t i = 0; i < COMPONENT_COUNT; i++)
 	{
 		components_[i]->initialize(*this) ?
-//				trace_printf("[%s]\tInitialized\n", components_[i]->name().c_str()) :
-//				trace_printf("[%s]\t!!! NOT initialized !!!\n", components_[i]->name().c_str());
 				trace << "[" << components_[i]->name().c_str() << "]\tInitialized" << endl :
 				trace << "[" << components_[i]->name().c_str() << "]\t!!! NOT initialized !!!"
 						<< endl;
@@ -66,17 +64,26 @@ void ComponentRegistry::run()
 	for (uint8_t i = 0; i < COMPONENT_COUNT; i++)
 	{
 		components_[i]->start() ?
-//				trace_printf("[%s]\tStarted\n", components_[i]->name().c_str()) :
-//				trace_printf("[%s]\t!!! NOT started !!!\n", components_[i]->name().c_str());
-				trace << "[" << components_[i]->name().c_str() << "]\tStarted" << endl :
+				trace << "[" << components_[i]->name().c_str() << "]\tStarted " << ios_base::hex
+						<< reinterpret_cast<uint32_t>(components_[i]->get_task().handle())
+						<< ios_base::dec << endl :
 				trace << "[" << components_[i]->name().c_str() << "]\t!!! NOT started !!!" << endl;
 	}
 
+	trace << Task::number_of_tasks() << " tasks are running" << endl;
+
 	/// --- Infinite Loop	------------------------------------------------------------------------
+
+	char buffer[40 * 4];
+	femtin::Array<TaskStatus_t, 4> task_status;
 
 	for (;;)
 	{
-		vTaskDelay(xDelay);
+		Task::list_custom(buffer, task_status);
+		trace << "Name\tState\tPrio\tNum\tStack" << endl;
+		trace << buffer << endl;
+
+		femtin::os::task_delay_until(unit::second(10));
 	}
 }
 

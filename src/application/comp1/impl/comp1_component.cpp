@@ -33,7 +33,7 @@ const String<COMPONENT_NAME_LEN_MAX>& Comp1_Component::name() const
 
 /// ------------------------------------------------------------------------------------------------
 
-void* Comp1_Component::getAPIService()
+void* Comp1_Component::get_API_service()
 {
 	return &service_;
 }
@@ -42,9 +42,7 @@ void* Comp1_Component::getAPIService()
 
 bool Comp1_Component::initialize(ComponentRegistry& _comp_reg)
 {
-	bool b_result = task_.initialize(_comp_reg);
-
-	return b_result;
+	return task_.initialize(_comp_reg);
 }
 
 /// ------------------------------------------------------------------------------------------------
@@ -52,7 +50,6 @@ bool Comp1_Component::initialize(ComponentRegistry& _comp_reg)
 bool Comp1_Component::start()
 {
 	task_.resume();
-
 	return true;
 }
 

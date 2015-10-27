@@ -8,7 +8,8 @@
 /// === INCLUDES	================================================================================
 
 #include "freeRTOS_hook.h"
-#include "diag/Trace.h"
+#include "bsp/trace_uart/trace_uart.hpp"
+//#include "diag/Trace.h"
 
 /// === NAMESPACES	================================================================================
 
@@ -40,7 +41,14 @@ void vApplicationIdleHook(void)
 /// ----------------------------------------------------------------------------------------------
 
 #if  (configUSE_TICK_HOOK > 0)
-
+/*The tick interrupt can optionally call an application defined hook (or callback) function - the
+ tick hook. The tick hook provides a convenient place to implement timer functionality.
+ The tick hook will only get called if configUSE_TICK_HOOK is set to 1 within FreeRTOSConfig.h.
+ When this is set the application must provide the hook function with the following prototype:
+ void vApplicationTickHook( void );
+ vApplicationTickHook() executes from within an ISR so must be very short, not use much stack,
+ and not call any API functions that don't end in "FromISR" or "FROM_ISR".
+ */
 void vApplicationTickHook(void)
 {
 }
@@ -59,7 +67,9 @@ void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
 	 configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
 	 function is called if a stack overflow is detected. */
 //  taskDISABLE_INTERRUPTS ();
-	trace_printf("[StackOverFlow] !!! %s !!!\n", pcTaskName);
+//	trace_printf("[StackOverFlow] !!! %s !!!\n", pcTaskName);
+	board::mcu::trace << "[StackOverFlow] !!! " << reinterpret_cast<char*>(pcTaskName) << " !!!"
+						<< femtin::endl;
 
 	for (;;)
 		;
@@ -81,17 +91,17 @@ void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
  FreeRTOSConfig.h, and the xPortGetFreeHeapSize() API function can be used
  to query the size of free heap space that remains (although it does not
  provide information on how the remaining heap might be fragmented). */
-void
-vApplicationMallocFailedHook (void)
+void vApplicationMallocFailedHook(void)
 {
 //  taskDISABLE_INTERRUPTS ();
+	board::mcu::trace << "[MallocFailed] !!!" << femtin::endl;
 	for (;;)
-	;
+		;
 }
 
 #endif
 
-/// === PRIVATE DEFINITIONS	========================================================================
+/// ----------------------------------------------------------------------------------------------
 
 #ifdef __cplusplus
 }

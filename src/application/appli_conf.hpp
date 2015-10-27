@@ -24,11 +24,11 @@ const uint8_t COMPONENT_COUNT = 1;
 const uint8_t COMPONENT_NAME_LEN_MAX = configMAX_TASK_NAME_LEN;
 
 const UBaseType_t COMPONENT_REGISTRY_TASK_PRIO = (tskIDLE_PRIORITY + 4);
-const uint16_t COMPONENT_REGISTRY_TASK_STACK_SIZE = configMINIMAL_STACK_SIZE;
+const uint16_t COMPONENT_REGISTRY_TASK_STACK_SIZE = (1024 / 4);
 const femtin::String<COMPONENT_NAME_LEN_MAX> COMPONENT_REGISTRY_TASK_NAME("CompReg");
 
 const UBaseType_t COMP1_TASK_PRIO = (tskIDLE_PRIORITY + 3);
-const uint16_t COMP1_TASK_STACK_SIZE = configMINIMAL_STACK_SIZE * 2;
+const uint16_t COMP1_TASK_STACK_SIZE = (576 / 4);
 const femtin::String<COMPONENT_NAME_LEN_MAX> COMP1_TASK_NAME("Comp1");
 
 /// ------------------------------------------------------------------------------------------------
