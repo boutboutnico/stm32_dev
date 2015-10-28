@@ -8,7 +8,7 @@
 /// === Includes	================================================================================
 
 #include "FreeRTOS.h"
-#include "system_controller/component_registry.hpp"
+#include "system_controller/stm32_dev_registry.hpp"
 #include "bsp/trace_uart/trace_uart.hpp"
 
 /// === Namespaces	================================================================================
@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 
 	board::mcu::trace.initialize(115200);
 
-	static ComponentRegistry comp_reg;
+	static STM32_Dev_Registry stm32_dev_reg;
 
 	vTaskStartScheduler();    /// should never return
 }

@@ -15,66 +15,55 @@
 
 /// ================================================================================================
 ///
-/// \file	comp1_component.hpp
+/// \file	stm32_dev_registry.hpp
 /// \brief
 /// \date	28/10/2015
 /// \author	nboutin
 ///
 /// ================================================================================================
-#ifndef APPLICATION_COMP1_IMPL_COMP1_COMPONENT_HPP_
-#define APPLICATION_COMP1_IMPL_COMP1_COMPONENT_HPP_
+#ifndef APPLICATION_SYSTEM_CONTROLLER_STM32_DEV_REGISTRY_HPP_
+#define APPLICATION_SYSTEM_CONTROLLER_STM32_DEV_REGISTRY_HPP_
 
 /// === Includes	================================================================================
 
-#include "femtin/core/system_controller/icomponent.hpp"
-#include "comp1_service.hpp"
-#include "comp1_task.hpp"
+#include "femtin/core/system_controller/component_registry.hpp"
 
 /// === Namespaces	================================================================================
 
 namespace application
 {
 
-namespace comp1
+namespace system_controller
 {
 /// === Forward Declarations	====================================================================
 /// === Enumerations	============================================================================
-/// === Class Declarations	========================================================================
 
-class Comp1_Component : public femtin::system_controller::IComponent
-{
-public:
-	/// === Constants	============================================================================
-	/// === Public Declarations	====================================================================
-
-	Comp1_Component();
-
-	/// --- Component interface	--------------------------------------------------------------------
-
-	virtual const femtin::String<COMPONENT_NAME_LEN_MAX>& name() const;
-
-	virtual void* get_API_service();
-
-	virtual const femtin::os::Task& get_task() const;
-
-	virtual bool initialize(femtin::system_controller::Component_Registry& _comp_reg);
-
-	virtual bool start();
-
-private:
-	/// === Private Declarations	================================================================
-	/// === Private Attributs	====================================================================
-
-	Comp1_Service service_;
-	Comp1_Task task_;
+enum class Component_Name_e
+	: uint8_t
+	{
+		Comp1 = 0,
+	Comp2,
 };
 
-/// === Inlines Declarations	====================================================================
+/// === Class Declarations	========================================================================
 
-inline const femtin::os::Task& Comp1_Component::get_task() const
+class STM32_Dev_Registry : public femtin::system_controller::Component_Registry
 {
-	return task_;
-}
+public:
+	/// === Public Constants	====================================================================
+	/// === Public Declarations	====================================================================
+
+	STM32_Dev_Registry();
+
+private:
+	///	=== Private Constants	====================================================================
+	/// === Private Declarations	================================================================
+	/// === Private Attributes	====================================================================
+};
+
+/// === Inlines Definitions	========================================================================
+
+///	=== Non-Members Definitions	====================================================================
 
 /// ------------------------------------------------------------------------------------------------
 }

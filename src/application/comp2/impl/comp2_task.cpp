@@ -15,51 +15,54 @@
 
 /// ================================================================================================
 ///
-/// \file	comp1_task.hpp
+/// \file	comp2_task.cpp
 /// \brief
 /// \date	28/10/2015
 /// \author	nboutin
 ///
 /// ================================================================================================
-#ifndef APPLICATION_COMP1_IMPL_COMP1_TASK_HPP_
-#define APPLICATION_COMP1_IMPL_COMP1_TASK_HPP_
+#include "comp2_task.hpp"
+using namespace application::comp2;
 
 /// === Includes	================================================================================
 
-#include "femtin/freeRTOS_wrapper/task/task.hpp"
-#include "femtin/core/system_controller/component_registry.hpp"
+#include "femtin/freeRTOS_wrapper/delay.hpp"
+#include "appli_conf.hpp"
+#include "bsp/trace_uart/trace_uart.hpp"
 
 /// === Namespaces	================================================================================
 
-namespace application
+using namespace femtin;
+using namespace femtin::os;
+using namespace board::mcu;
+
+/// === Public Definitions	========================================================================
+
+Comp2_Task::Comp2_Task()
+		: Task(application::COMP2_TASK_NAME.c_str(), application::COMP2_TASK_STACK_SIZE,
+				application::COMP2_TASK_PRIO)
 {
-namespace comp1
-{
-
-/// === Class Declarations	========================================================================
-
-class Comp1_Task : public femtin::os::Task
-{
-public:
-	/// === Public Constants	====================================================================
-	/// === Public Declarations	====================================================================
-
-	Comp1_Task();
-
-	bool initialize(femtin::system_controller::Component_Registry& _comp_reg);
-
-	virtual void run();
-
-private:
-	/// === Private Constants	====================================================================
-	/// === Private Declarations	================================================================
-	/// === Private Attributes	====================================================================
-};
-
-/// === Inlines Definitions	========================================================================
+	suspend();
+}
 
 /// ------------------------------------------------------------------------------------------------
+
+bool Comp2_Task::initialize(femtin::system_controller::Component_Registry& _comp_reg)
+{
+	(void) _comp_reg;
+	return true;
 }
+
+/// ------------------------------------------------------------------------------------------------
+
+void Comp2_Task::run()
+{
+	for (;;)
+	{
+		trace << "[Comp2] I am alive" << endl;
+
+		task_delay_until(unit::millisecond(5000));
+	}
 }
-#endif
+
 /// === END OF FILE	================================================================================

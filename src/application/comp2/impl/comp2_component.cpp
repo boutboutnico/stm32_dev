@@ -15,15 +15,14 @@
 
 /// ================================================================================================
 ///
-/// \file	com1_component.cpp
+/// \file	com2_component.cpp
 /// \brief
 /// \date	28/10/2015
 /// \author	nboutin
 ///
 /// ================================================================================================
-
-#include "comp1_component.hpp"
-using namespace application::comp1;
+#include "comp2_component.hpp"
+using namespace application::comp2;
 
 /// === Includes	================================================================================
 /// === Namespaces	================================================================================
@@ -35,7 +34,7 @@ using namespace application;
 /// === Constants	================================================================================
 /// === Public Definitions	========================================================================
 
-Comp1_Component::Comp1_Component()
+Comp2_Component::Comp2_Component()
 		: service_(), task_()
 {
 
@@ -43,28 +42,28 @@ Comp1_Component::Comp1_Component()
 
 /// ------------------------------------------------------------------------------------------------
 
-const String<COMPONENT_NAME_LEN_MAX>& Comp1_Component::name() const
+const String<COMPONENT_NAME_LEN_MAX>& Comp2_Component::name() const
 {
-	return COMP1_TASK_NAME;
+	return COMP2_TASK_NAME;
 }
 
 /// ------------------------------------------------------------------------------------------------
 
-void* Comp1_Component::get_API_service()
+void* Comp2_Component::get_API_service()
 {
 	return &service_;
 }
 
 /// ------------------------------------------------------------------------------------------------
 
-bool Comp1_Component::initialize(Component_Registry& _comp_reg)
+bool Comp2_Component::initialize(Component_Registry& _comp_reg)
 {
 	return task_.initialize(_comp_reg);
 }
 
 /// ------------------------------------------------------------------------------------------------
 
-bool Comp1_Component::start()
+bool Comp2_Component::start()
 {
 	task_.resume();
 	return true;

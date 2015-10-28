@@ -15,39 +15,39 @@
 
 /// ================================================================================================
 ///
-/// \file	comp1_component.hpp
+/// \file	comp2_component.hpp
 /// \brief
 /// \date	28/10/2015
 /// \author	nboutin
 ///
 /// ================================================================================================
-#ifndef APPLICATION_COMP1_IMPL_COMP1_COMPONENT_HPP_
-#define APPLICATION_COMP1_IMPL_COMP1_COMPONENT_HPP_
+#ifndef APPLICATION_COMP2_IMPL_COMP2_COMPONENT_HPP_
+#define APPLICATION_COMP2_IMPL_COMP2_COMPONENT_HPP_
 
 /// === Includes	================================================================================
 
 #include "femtin/core/system_controller/icomponent.hpp"
-#include "comp1_service.hpp"
-#include "comp1_task.hpp"
+#include "comp2_service.hpp"
+#include "comp2_task.hpp"
 
 /// === Namespaces	================================================================================
 
 namespace application
 {
 
-namespace comp1
+namespace comp2
 {
 /// === Forward Declarations	====================================================================
 /// === Enumerations	============================================================================
 /// === Class Declarations	========================================================================
 
-class Comp1_Component : public femtin::system_controller::IComponent
+class Comp2_Component : public femtin::system_controller::IComponent
 {
 public:
 	/// === Constants	============================================================================
 	/// === Public Declarations	====================================================================
 
-	Comp1_Component();
+	Comp2_Component();
 
 	/// --- Component interface	--------------------------------------------------------------------
 
@@ -65,13 +65,13 @@ private:
 	/// === Private Declarations	================================================================
 	/// === Private Attributs	====================================================================
 
-	Comp1_Service service_;
-	Comp1_Task task_;
+	Comp2_Service service_;
+	Comp2_Task task_;
 };
 
 /// === Inlines Declarations	====================================================================
 
-inline const femtin::os::Task& Comp1_Component::get_task() const
+inline const femtin::os::Task& Comp2_Component::get_task() const
 {
 	return task_;
 }

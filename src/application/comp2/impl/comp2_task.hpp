@@ -15,70 +15,51 @@
 
 /// ================================================================================================
 ///
-/// \file	comp1_component.hpp
+/// \file	comp2_task.hpp
 /// \brief
 /// \date	28/10/2015
 /// \author	nboutin
 ///
 /// ================================================================================================
-#ifndef APPLICATION_COMP1_IMPL_COMP1_COMPONENT_HPP_
-#define APPLICATION_COMP1_IMPL_COMP1_COMPONENT_HPP_
+#ifndef APPLICATION_COMP2_IMPL_COMP2_TASK_HPP_
+#define APPLICATION_COMP2_IMPL_COMP2_TASK_HPP_
 
 /// === Includes	================================================================================
 
-#include "femtin/core/system_controller/icomponent.hpp"
-#include "comp1_service.hpp"
-#include "comp1_task.hpp"
+#include "femtin/freeRTOS_wrapper/task/task.hpp"
+#include "femtin/core/system_controller/component_registry.hpp"
 
 /// === Namespaces	================================================================================
 
 namespace application
 {
-
-namespace comp1
+namespace comp2
 {
-/// === Forward Declarations	====================================================================
-/// === Enumerations	============================================================================
+
 /// === Class Declarations	========================================================================
 
-class Comp1_Component : public femtin::system_controller::IComponent
+class Comp2_Task : public femtin::os::Task
 {
 public:
-	/// === Constants	============================================================================
+	/// === Public Constants	====================================================================
 	/// === Public Declarations	====================================================================
 
-	Comp1_Component();
+	Comp2_Task();
 
-	/// --- Component interface	--------------------------------------------------------------------
+	bool initialize(femtin::system_controller::Component_Registry& _comp_reg);
 
-	virtual const femtin::String<COMPONENT_NAME_LEN_MAX>& name() const;
-
-	virtual void* get_API_service();
-
-	virtual const femtin::os::Task& get_task() const;
-
-	virtual bool initialize(femtin::system_controller::Component_Registry& _comp_reg);
-
-	virtual bool start();
+	virtual void run();
 
 private:
+	/// === Private Constants	====================================================================
 	/// === Private Declarations	================================================================
-	/// === Private Attributs	====================================================================
-
-	Comp1_Service service_;
-	Comp1_Task task_;
+	/// === Private Attributes	====================================================================
 };
 
-/// === Inlines Declarations	====================================================================
-
-inline const femtin::os::Task& Comp1_Component::get_task() const
-{
-	return task_;
-}
+/// === Inlines Definitions	========================================================================
 
 /// ------------------------------------------------------------------------------------------------
 }
 }
-
 #endif
 /// === END OF FILE	================================================================================

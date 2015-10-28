@@ -15,59 +15,35 @@
 
 /// ================================================================================================
 ///
-/// \file	com1_component.cpp
-/// \brief
-/// \date	28/10/2015
+/// \file	stm32_dev_registry.cpp
+///	\brief	
+///	\date	28/10/2015
 /// \author	nboutin
 ///
 /// ================================================================================================
-
-#include "comp1_component.hpp"
-using namespace application::comp1;
+#include "stm32_dev_registry.hpp"
+using namespace application::system_controller;
 
 /// === Includes	================================================================================
+
+#include "../comp1/impl/comp1_component.hpp"
+#include "../comp2/impl/comp2_component.hpp"
+
 /// === Namespaces	================================================================================
-
-using namespace femtin;
-using namespace femtin::system_controller;
-using namespace application;
-
 /// === Constants	================================================================================
+
+const uint8_t Comp1_id = static_cast<uint8_t>(Component_Name_e::Comp1);
+const uint8_t Comp2_id = static_cast<uint8_t>(Component_Name_e::Comp2);
+
 /// === Public Definitions	========================================================================
 
-Comp1_Component::Comp1_Component()
-		: service_(), task_()
+STM32_Dev_Registry::STM32_Dev_Registry()
 {
+	static comp1::Comp1_Component comp1;
+	static comp2::Comp2_Component comp2;
 
-}
-
-/// ------------------------------------------------------------------------------------------------
-
-const String<COMPONENT_NAME_LEN_MAX>& Comp1_Component::name() const
-{
-	return COMP1_TASK_NAME;
-}
-
-/// ------------------------------------------------------------------------------------------------
-
-void* Comp1_Component::get_API_service()
-{
-	return &service_;
-}
-
-/// ------------------------------------------------------------------------------------------------
-
-bool Comp1_Component::initialize(Component_Registry& _comp_reg)
-{
-	return task_.initialize(_comp_reg);
-}
-
-/// ------------------------------------------------------------------------------------------------
-
-bool Comp1_Component::start()
-{
-	task_.resume();
-	return true;
+	components_[Comp1_id] = &comp1;
+	components_[Comp2_id] = &comp2;
 }
 
 /// ------------------------------------------------------------------------------------------------

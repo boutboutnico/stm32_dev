@@ -1,10 +1,26 @@
-///
-/// \file	template.hpp
-///	\brief
-///	\date	dd/mm/yyyy
-/// \author	author
-///
+/*
+ Femtin V0.0.1 - Copyright (C) 2015 Nicolas Boutin.
+ All rights reserved
 
+ This file is part of the Femtin distribution.
+
+ Femtin is free software; you can redistribute it and/or modify it under
+ the terms of the GNU General Public License (version 2) as published by the
+ Free Software Foundation.
+
+ Femtin is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.
+ */
+
+/// ================================================================================================
+///
+/// \file	comp1_task.cpp
+/// \brief
+/// \date	28/10/2015
+/// \author	nboutin
+///
+/// ================================================================================================
 #include "comp1_task.hpp"
 using namespace application::comp1;
 
@@ -15,10 +31,6 @@ using namespace application::comp1;
 #include "demo/trace_uart/trace_uart_demo.hpp"
 #include "demo/clcd_420b/clcd_demo.hpp"
 #include "demo/joystick_thumb/joystick_demo.hpp"
-
-#include "bsp/trace_uart/trace_uart.hpp"
-using namespace board::mcu;
-using namespace femtin;
 
 /// === Namespaces	================================================================================
 /// === Public Definitions	========================================================================
@@ -32,7 +44,7 @@ Comp1_Task::Comp1_Task()
 
 /// ------------------------------------------------------------------------------------------------
 
-bool Comp1_Task::initialize(application::system_controller::ComponentRegistry& _comp_reg)
+bool Comp1_Task::initialize(femtin::system_controller::Component_Registry& _comp_reg)
 {
 	(void) _comp_reg;
 	return true;
