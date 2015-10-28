@@ -45,17 +45,19 @@ const uint8_t TASK_COUNT = 1	/// Component Registry Task
 							+ 1						/// IDLE Task used
 							+ 1;					/// FreeRTOS Timer used
 
-const UBaseType_t COMPONENT_REGISTRY_TASK_PRIO = (tskIDLE_PRIORITY + 4);
+const UBaseType_t COMPONENT_REGISTRY_TASK_PRIO = 4;
 const uint16_t COMPONENT_REGISTRY_TASK_STACK_SIZE = (1024 / 4);
 const femtin::String<COMPONENT_NAME_LEN_MAX> COMPONENT_REGISTRY_TASK_NAME("CompReg");
 
-const UBaseType_t COMP1_TASK_PRIO = (tskIDLE_PRIORITY + 3);
+const UBaseType_t COMP1_TASK_PRIO = 3;
 const uint16_t COMP1_TASK_STACK_SIZE = (576 / 4);
 const femtin::String<COMPONENT_NAME_LEN_MAX> COMP1_TASK_NAME("Comp1");
 
-const UBaseType_t COMP2_TASK_PRIO = (tskIDLE_PRIORITY + 2);
+const UBaseType_t COMP2_TASK_PRIO = 2;
 const uint16_t COMP2_TASK_STACK_SIZE = (512 / 4);
 const femtin::String<COMPONENT_NAME_LEN_MAX> COMP2_TASK_NAME("Comp2");
+
+/// Task priority 1 is reserved for Timer Service Task
 
 /// ------------------------------------------------------------------------------------------------
 }
