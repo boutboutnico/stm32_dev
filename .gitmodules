@@ -1,0 +1,3 @@
+[submodule "src/external/freertos"]
+	path = src/external/freertos
+	url = https://github.com/cjlano/freertos

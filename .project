@@ -30,10 +30,5 @@
 			<type>2</type>
 			<locationURI>FEMTIN_HOME</locationURI>
 		</link>
-		<link>
-			<name>src/external/FREERTOS_HOME</name>
-			<type>2</type>
-			<locationURI>FREERTOS_HOME</locationURI>
-		</link>
 	</linkedResources>
 </projectDescription>
