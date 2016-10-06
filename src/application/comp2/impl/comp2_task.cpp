@@ -27,14 +27,16 @@ using namespace application::comp2;
 /// === Includes	================================================================================
 
 #include "femtin/freeRTOS_wrapper/delay.hpp"
+#include "femtin/trace/trace.hpp"
 #include "appli_conf.hpp"
-#include "bsp/trace_uart/trace_uart.hpp"
+//#include "bsp/trace_uart/trace_uart.hpp"
+
 
 /// === Namespaces	================================================================================
 
 using namespace femtin;
 using namespace femtin::os;
-using namespace board::mcu;
+//using namespace board::mcu;
 
 /// === Public Definitions	========================================================================
 
@@ -59,7 +61,7 @@ void Comp2_Task::run()
 {
 	for (;;)
 	{
-		trace << "[Comp2] I am alive" << endl;
+		TRACE_F("Comp_2", "I am alive\n");
 
 		task_delay_until(unit::millisecond(5000));
 	}

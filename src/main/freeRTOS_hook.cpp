@@ -8,8 +8,8 @@
 /// === INCLUDES	================================================================================
 
 #include "freeRTOS_hook.h"
-#include "bsp/trace_uart/trace_uart.hpp"
-//#include "diag/Trace.h"
+//#include "bsp/trace_uart/trace_uart.hpp"
+#include "femtin/trace/trace.hpp"
 
 /// === NAMESPACES	================================================================================
 
@@ -68,8 +68,10 @@ void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
 	 function is called if a stack overflow is detected. */
 //  taskDISABLE_INTERRUPTS ();
 //	trace_printf("[StackOverFlow] !!! %s !!!\n", pcTaskName);
-	board::mcu::trace << "[StackOverFlow] !!! " << reinterpret_cast<char*>(pcTaskName) << " !!!"
-						<< femtin::endl;
+//	board::mcu::trace << "[StackOverFlow] !!! " << reinterpret_cast<char*>(pcTaskName) << " !!!"
+//						<< femtin::endl;
+
+	TRACE_F("StackOverFlow", "!!! %s !!!\n", reinterpret_cast<char*>(pcTaskName));
 
 	for (;;)
 		;
@@ -94,7 +96,8 @@ void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName)
 void vApplicationMallocFailedHook(void)
 {
 //  taskDISABLE_INTERRUPTS ();
-	board::mcu::trace << "[MallocFailed] !!!" << femtin::endl;
+//	board::mcu::trace << "[MallocFailed] !!!" << femtin::endl;
+	TRACE_F("MallocFailed", "!!! Error !!!\n");
 	for (;;)
 		;
 }

@@ -23,23 +23,19 @@ extern "C"
 #endif
 
 #if ( configUSE_IDLE_HOOK > 0 )
-  void
-  vApplicationIdleHook (void);
+void vApplicationIdleHook(void);
 #endif
 
 #if  (configUSE_TICK_HOOK > 0)
-  void
-  vApplicationTickHook (void);
+void vApplicationTickHook(void);
 #endif
 
 #if (configCHECK_FOR_STACK_OVERFLOW > 0)
-void
-vApplicationStackOverflowHook (xTaskHandle pxTask, signed char *pcTaskName);
+void vApplicationStackOverflowHook(xTaskHandle pxTask, signed char *pcTaskName);
 #endif
 
 #if (configUSE_MALLOC_FAILED_HOOK > 0)
-void
-vApplicationMallocFailedHook (void);
+void vApplicationMallocFailedHook(void);
 #endif
 
 #ifdef __cplusplus
@@ -48,5 +44,5 @@ vApplicationMallocFailedHook (void);
 
 /// === INLINE DEFINITIONS	====================================================================
 
-#endif	/// FREERTOS_HOOK_H_
+#endif
 /// === END OF FILE	============================================================================
